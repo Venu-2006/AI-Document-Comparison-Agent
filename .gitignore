@@ -1,0 +1,14 @@
+venv/
+__pycache__/
+.env
+
+screenshots/
+uploads/
+source_pages/
+target_pages/
+
+*.pdf
+*.xlsx
+*.png
+
+Comparison_Report*
