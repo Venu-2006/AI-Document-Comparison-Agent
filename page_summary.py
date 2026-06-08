@@ -54,10 +54,7 @@ def _build_line_diff_notes(
             target_lines
         )
     )
-    removed_words, added_words = detect_word_changes(
-    source_text,
-    target_text
-)
+    
 
     removed = []
     added = []
@@ -146,13 +143,21 @@ def detect_word_changes(
 
     for item in diff:
 
+        word = item[2:].strip()
+
+        if len(word) < 3:
+            continue
+
         if item.startswith("- "):
-            removed.append(item[2:])
+            removed.append(word)
 
         elif item.startswith("+ "):
-            added.append(item[2:])
+            added.append(word)
 
-    return removed[:20], added[:20]
+    return (
+        removed[:20],
+        added[:20]
+    )
 def generate_page_summary(
     page_number: int,
     source_image_path: str,
@@ -166,6 +171,10 @@ def generate_page_summary(
     target_img = Image.open(target_image_path)
 
     diff_notes = _build_line_diff_notes(source_text, target_text)
+    removed_words, added_words = detect_word_changes(
+    source_text,
+    target_text
+)
 
     prompt = f"""
 You are a senior document comparison analyst.
@@ -259,13 +268,21 @@ OCR TARGET TEXT:
 OCR LINE DIFF NOTES:
 {diff_notes}
 
-WORD LEVEL CHANGES:
+WORD LEVEL CHANGES
 
 Removed Words:
-{removed_words}
+{", ".join(removed_words)}
 
 Added Words:
-{added_words}
+{", ".join(added_words)}
+
+If only one or two words changed within an otherwise identical sentence:
+
+Classify under:
+
+Modified Content
+
+Do NOT classify the entire sentence as Added Content and Removed Content.
 Return this format exactly:
 
 Page {page_number} Summary
