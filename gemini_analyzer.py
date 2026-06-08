@@ -49,7 +49,8 @@ Rules:
 - Report only what is visibly different.
 
 IMPORTANT:
-
+Ignore punctuation-only changes unless
+they alter the meaning of the sentence.
 A change definitely exists.
 
 Do NOT determine whether a change exists.
