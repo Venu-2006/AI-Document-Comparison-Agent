@@ -284,15 +284,26 @@ def run_comparison():
             )
             summary_lower = full_summary.lower()
 
-            if "modified content" in summary_lower:
+            if (
+                "modified content:" in summary_lower
+                and
+                "modified content: none" not in summary_lower
+            ):
                 change_stats["text"] += 1
             
-            if "layout / reflow" in summary_lower:
+            if (
+                "layout / reflow:" in summary_lower
+                and
+                "layout / reflow: none" not in summary_lower
+            ):
                 change_stats["layout"] += 1
             
-            if "formatting / spacing" in summary_lower:
+            if (
+                "formatting / spacing:" in summary_lower
+                and
+                "formatting / spacing: none" not in summary_lower
+            ):
                 change_stats["formatting"] += 1
-
             
             page_summaries[
                 page_no
