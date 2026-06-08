@@ -10,7 +10,7 @@ from excel_report_v2 import generate_excel_report_v2
 from report_generator import generate_pdf_report
 from statistics_generator import calculate_statistics
 
-POPPLER_PATH = r"D:\poppler\Library\bin"
+POPPLER_PATH = None 
 
 
 def pdf_to_images(pdf_path, output_folder):
@@ -24,7 +24,7 @@ def pdf_to_images(pdf_path, output_folder):
     pages = convert_from_path(
         pdf_path,
         dpi=300,
-        poppler_path=POPPLER_PATH
+        
     )
 
     for i, page in enumerate(pages):
