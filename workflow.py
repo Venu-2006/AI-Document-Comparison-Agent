@@ -122,82 +122,82 @@ def run_comparison():
                 )
             )
 
-            # ==========================
-            # Visual Region Analysis
-            # ==========================
+# ==========================
+# Visual Region Analysis
+# ==========================
 
-            region_summary = ""
+region_summary = ""
 
-            region_count = page_region_counts.get(
-                page_no,
-                0
+region_count = page_region_counts.get(
+    page_no,
+    0
+)
+
+for region in range(
+    1,
+    region_count + 1
+):
+
+    source_crop = (
+        f"screenshots/page_{page_no}_change_{region}_source.png"
+    )
+
+    target_crop = (
+        f"screenshots/page_{page_no}_change_{region}_target.png"
+    )
+
+    if (
+        os.path.exists(source_crop)
+        and
+        os.path.exists(target_crop)
+    ):
+
+        try:
+
+            source_crop_text = extract_page_text(
+                source_crop
             )
 
-            for region in range(
-                1,
-                region_count + 1
+            target_crop_text = extract_page_text(
+                target_crop
+            )
+
+            # Detect text-only changes
+            if (
+                len(source_crop_text.strip()) > 30
+                and
+                len(target_crop_text.strip()) > 30
             ):
 
-                source_crop = (
-                    f"screenshots/page_{page_no}_change_{region}_source.png"
+                region_analysis = (
+                    "Type: Layout Reflow / Text Change\n\n"
+                    "Description: The detected region "
+                    "contains primarily text content. "
+                    "The difference appears to be caused "
+                    "by text insertion, text removal, or "
+                    "paragraph reflow rather than an "
+                    "image modification.\n\n"
+                    "Severity: Medium"
                 )
 
-                target_crop = (
-                    f"screenshots/page_{page_no}_change_{region}_target.png"
+            else:
+
+                region_analysis = analyze_region(
+                    source_crop,
+                    target_crop
                 )
 
-                if (
-                    os.path.exists(source_crop)
-                    and
-                    os.path.exists(target_crop)
-                ):
+            region_summary += (
+                f"\n\nVisual Change {region}\n"
+                f"{region_analysis}"
+            )
 
-                    try:
+        except Exception as e:
 
-                        source_crop_text = extract_page_text(
-                source_crop
-                  )
-
-                        target_crop_text = extract_page_text(
-                 target_crop
-                 )
-
-                        if (
-                         len(source_crop_text.strip()) > 30
-                         and
-                         len(target_crop_text.strip()) > 30
-                         ):
-
-                         region_analysis = (
-        "Layout Reflow / Text Change\n"
-        "The detected visual difference "
-        "contains primarily text content. "
-        "This change is likely caused by "
-        "text insertion, removal, or "
-        "paragraph reflow rather than "
-        "an image modification."
-    )
-
-                         else:
-
-    region_analysis = analyze_region(
-        source_crop,
-        target_crop
-    )
-                        )
-
-                        region_summary += (
-                            f"\n\nVisual Change {region}\n"
-                            f"{region_analysis}"
-                        )
-
-                    except Exception as e:
-
-                        region_summary += (
-                            f"\n\nVisual Change {region}\n"
-                            f"Gemini Region Error: {str(e)}"
-                        )
-
+            region_summary += (
+                f"\n\nVisual Change {region}\n"
+                f"Gemini Region Error: {str(e)}"
+            )
             full_summary = (
                 summary
                 + "\n\n"
