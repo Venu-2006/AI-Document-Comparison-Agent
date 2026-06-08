@@ -104,29 +104,39 @@ if compare:
 
     st.success(f"Similarity Score: {avg_score:.4f}")
     st.progress(float(avg_score))
+    st.subheader("📊 Change Categories")
 
-    m1, m2, m3, m4, m5 = st.columns(5)
+    c1, c2, c3, c4 = st.columns(4)
+    
+    with c1:
+        st.metric(
+            "📝 Text",
+            change_stats["text"]
+        )
+    
+    with c2:
+        st.metric(
+            "🖼️ Visual",
+            change_stats["visual"]
+        )
+    
+    with c3:
+        st.metric(
+            "📐 Layout",
+            change_stats["layout"]
+        )
+    
+    with c4:
+        st.metric(
+            "🎨 Formatting",
+            change_stats["formatting"]
+        )
 
-    m1.metric("Critical", stats["critical"])
-    m2.metric("High", stats["high"])
-    m3.metric("Medium", stats["medium"])
-    m4.metric("Low", stats["low"])
-    m5.metric("Total", stats["total"])
+   
 
     st.info(f"Pages Compared: {len(results)}")
 
-    chart_data = pd.DataFrame({
-        "Severity": ["Critical", "High", "Medium", "Low"],
-        "Count": [
-            stats["critical"],
-            stats["high"],
-            stats["medium"],
-            stats["low"]
-        ]
-    })
-
-    st.subheader("📈 Change Distribution")
-    st.bar_chart(chart_data.set_index("Severity"))
+    
 
     st.subheader("📝 Executive Summary")
     st.info(document_summary)
