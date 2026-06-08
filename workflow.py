@@ -168,12 +168,22 @@ def run_comparison():
                             target_crop_text
                         ).ratio()
                         
+                        combined_text = (
+                            source_crop_text.strip()
+                            + target_crop_text.strip()
+                        )
+                        
+                        alpha_chars = sum(
+                            c.isalpha()
+                            for c in combined_text
+                        )
+                        
                         if (
+                            alpha_chars > 10
+                            or
                             len(source_crop_text.strip()) > 30
-                            and
+                            or
                             len(target_crop_text.strip()) > 30
-                            and
-                            similarity > 0.40
                         ):
                         
                             region_analysis = (
@@ -181,10 +191,9 @@ def run_comparison():
                                 "Description: The detected region "
                                 "contains primarily textual content. "
                                 "The difference appears to be caused "
-                                "by text insertion, deletion, or "
+                                "by text insertion, text removal, or "
                                 "paragraph reflow rather than an "
-                                "image replacement.\n\n"
-                                f"OCR Similarity: {similarity:.2f}\n\n"
+                                "image modification.\n\n"
                                 "Severity: Medium"
                             )
                         
