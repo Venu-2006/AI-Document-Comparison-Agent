@@ -114,6 +114,14 @@ Rules:
 - Report those under a separate section called "Text Integrity Issues".
 - Keep the summary concise but complete.
 - Modernize the wording so the summary is useful and not vague.
+If added or removed text is shorter than 5 characters
+or contains mostly symbols,
+classify it only under:
+OCR / Extraction Uncertainty
+Do NOT place it under
+Added Content
+or
+Removed Content.
 
 OCR SOURCE TEXT:
 {_clip_text(source_text)}
