@@ -229,8 +229,23 @@ def run_comparison():
                                 target_crop
                             )
 
+                        # Confidence estimation
+
+                        if "Image Modified" in region_analysis:
+                            confidence = 95
+                        
+                        elif "Text Change" in region_analysis:
+                            confidence = 90
+                        
+                        elif "Layout Reflow" in region_analysis:
+                            confidence = 85
+                        
+                        else:
+                            confidence = 80
+                        
                         region_summary += (
                             f"\n\nVisual Change {region}\n"
+                            f"Confidence: {confidence}%\n\n"
                             f"{region_analysis}"
                         )
 
