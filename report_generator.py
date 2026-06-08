@@ -11,6 +11,7 @@ from reportlab.lib.styles import (
 )
 
 from datetime import datetime
+from zoneinfo import ZoneInfo
 import os
 
 
@@ -33,10 +34,11 @@ def generate_pdf_report(
 
     content = []
 
-    generated_time = datetime.now().strftime(
-        "%d-%b-%Y %H:%M:%S"
+    generated_time = datetime.now(
+    ZoneInfo("Asia/Kolkata")
+    ).strftime(
+    "%d-%b-%Y %H:%M:%S IST"
     )
-
     # ==========================================
     # REPORT HEADER
     # ==========================================
