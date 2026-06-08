@@ -1,9 +1,6 @@
-def calculate_statistics(
-    page_summaries
-):
+def calculate_statistics(page_summaries):
 
     stats = {
-
         "critical": 0,
         "high": 0,
         "medium": 0,
@@ -14,21 +11,28 @@ def calculate_statistics(
 
         text = summary.lower()
 
-        stats["critical"] += text.count(
-            "removed content"
-        )
+        # Critical
+        if "removed content" in text:
+            stats["critical"] += 1
 
-        stats["high"] += text.count(
-            "added content"
-        )
+        # High
+        if "added content" in text:
+            stats["high"] += 1
 
-        stats["medium"] += text.count(
-            "layout / reflow"
-        )
+        # Medium
+        if (
+            "modified content" in text
+            or "layout / reflow" in text
+        ):
+            stats["medium"] += 1
 
-        stats["low"] += text.count(
-            "text integrity issues"
-        )
+        # Low
+        if (
+            "text integrity issues" in text
+            or "formatting" in text
+            or "spacing" in text
+        ):
+            stats["low"] += 1
 
     stats["total"] = (
         stats["critical"]
