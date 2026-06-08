@@ -12,6 +12,12 @@ def run_comparison():
     page_summaries = {}
     page_region_counts = {}
 
+    change_stats = {
+      "text": 0,
+      "visual": 0,
+      "layout": 0,
+      "formatting": 0
+}
     source_pages = sorted(
         os.listdir("source_pages")
     )
@@ -228,6 +234,21 @@ def run_comparison():
                                 source_crop,
                                 target_crop
                             )
+                        # ==========================
+                        # Change Category Counting
+                        # ==========================
+                        
+                        if "Image Modified" in region_analysis:
+                            change_stats["visual"] += 1
+                        
+                        elif "Text Change" in region_analysis:
+                            change_stats["text"] += 1
+                        
+                        elif "Layout Reflow" in region_analysis:
+                            change_stats["layout"] += 1
+                        
+                        elif "Formatting" in region_analysis:
+                            change_stats["formatting"] += 1
 
                         # Confidence estimation
 
@@ -261,6 +282,16 @@ def run_comparison():
                 + "\n\n"
                 + region_summary
             )
+            summary_lower = full_summary.lower()
+
+            if "modified content" in summary_lower:
+                change_stats["text"] += 1
+            
+            if "layout / reflow" in summary_lower:
+                change_stats["layout"] += 1
+            
+            if "formatting / spacing" in summary_lower:
+                change_stats["formatting"] += 1
 
             
             page_summaries[
@@ -309,13 +340,9 @@ def run_comparison():
     )
 
     return (
-
-        results,
-
-        avg_score,
-
-        page_summaries,
-
-        document_summary
-
-    )
+    results,
+    avg_score,
+    page_summaries,
+    document_summary,
+    change_stats
+)
