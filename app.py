@@ -132,7 +132,7 @@ if compare:
     st.info(document_summary)
 
     pdf_file = generate_pdf_report(
-        score,
+        avg_score,
         document_summary,
         page_summaries,
         source_pdf.name,
