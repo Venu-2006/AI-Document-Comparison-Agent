@@ -9,6 +9,7 @@ from excel_report import generate_excel_report
 from excel_report_v2 import generate_excel_report_v2
 from report_generator import generate_pdf_report
 from statistics_generator import calculate_statistics
+import time
 
 POPPLER_PATH = None 
 
@@ -93,10 +94,38 @@ if compare:
 
     pdf_to_images(source_path, "source_pages")
     pdf_to_images(target_path, "target_pages")
-
     st.success("PDF pages generated successfully!")
 
+    # Estimate time
+    source_page_count = len(os.listdir("source_pages"))
+    estimated_time = max(10, source_page_count * 8)
+    
+    st.info(
+        f"⏱️ Estimated Processing Time: "
+        f"{estimated_time}-{estimated_time+5} seconds"
+    )
+    
+    # Progress UI
+    progress_bar = st.progress(0)
+    
+    status = st.status(
+        "🚀 Processing Documents...",
+        expanded=True
+    )
+    
+    status.write("📄 PDF Conversion Complete")
+    progress_bar.progress(20)
+    
+    status.write("🔍 Running OCR Extraction")
+    progress_bar.progress(40)
+    
+    status.write("🖼️ Performing Visual Comparison")
+    progress_bar.progress(60)
+    
     results,avg_score,page_summaries,document_summary,change_stats = run_comparison()
+    
+    status.write("🤖 Generating AI Summaries")
+    progress_bar.progress(80)
 
     stats = calculate_statistics(page_summaries)
 
@@ -158,6 +187,15 @@ if compare:
     excel_v2_file = generate_excel_report_v2(
         page_summaries
     )
+    status.write("📊 Generating Reports")
+    progress_bar.progress(95)
+    
+    status.update(
+        label="✅ Comparison Complete",
+        state="complete"
+    )
+    
+    progress_bar.progress(100)
     
     st.subheader("📥 Reports")
 
