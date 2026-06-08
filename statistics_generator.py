@@ -1,4 +1,8 @@
-def calculate_statistics(page_summaries):
+import re
+
+def calculate_statistics(
+    page_summaries
+):
 
     stats = {
         "critical": 0,
@@ -9,36 +13,36 @@ def calculate_statistics(page_summaries):
 
     for summary in page_summaries.values():
 
-        text = summary.lower()
+        stats["critical"] += len(
+            re.findall(
+                r"Removed Content:",
+                summary
+            )
+        )
 
-        # Critical
-        if "removed content" in text:
-            stats["critical"] += 1
+        stats["high"] += len(
+            re.findall(
+                r"Added Content:",
+                summary
+            )
+        )
 
-        # High
-        if "added content" in text:
-            stats["high"] += 1
+        stats["medium"] += len(
+            re.findall(
+                r"Modified Content:",
+                summary
+            )
+        )
 
-        # Medium
-        if (
-            "modified content" in text
-            or "layout / reflow" in text
-        ):
-            stats["medium"] += 1
+        stats["low"] += len(
+            re.findall(
+                r"Text Integrity",
+                summary
+            )
+        )
 
-        # Low
-        if (
-            "text integrity issues" in text
-            or "formatting" in text
-            or "spacing" in text
-        ):
-            stats["low"] += 1
-
-    stats["total"] = (
-        stats["critical"]
-        + stats["high"]
-        + stats["medium"]
-        + stats["low"]
+    stats["total"] = sum(
+        stats.values()
     )
 
     return stats
