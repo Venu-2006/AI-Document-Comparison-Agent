@@ -154,11 +154,36 @@ def run_comparison():
 
                     try:
 
-                        region_analysis = (
-                            analyze_region(
-                                source_crop,
-                                target_crop
-                            )
+                        source_crop_text = extract_page_text(
+                source_crop
+                  )
+
+                        target_crop_text = extract_page_text(
+                 target_crop
+                 )
+
+                        if (
+                         len(source_crop_text.strip()) > 30
+                         and
+                         len(target_crop_text.strip()) > 30
+                         ):
+
+                         region_analysis = (
+        "Layout Reflow / Text Change\n"
+        "The detected visual difference "
+        "contains primarily text content. "
+        "This change is likely caused by "
+        "text insertion, removal, or "
+        "paragraph reflow rather than "
+        "an image modification."
+    )
+
+                         else:
+
+    region_analysis = analyze_region(
+        source_crop,
+        target_crop
+    )
                         )
 
                         region_summary += (
