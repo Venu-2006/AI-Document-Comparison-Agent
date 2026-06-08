@@ -102,8 +102,8 @@ if compare:
 
     st.header("📊 Comparison Dashboard")
 
-    st.success(f"Similarity Score: {score:.4f}")
-    st.progress(float(score))
+    st.success(f"Similarity Score: {avg_score:.4f}")
+    st.progress(float(avg_score))
 
     m1, m2, m3, m4, m5 = st.columns(5)
 
@@ -132,7 +132,7 @@ if compare:
     st.info(document_summary)
 
     pdf_file = generate_pdf_report(
-        score,
+        avg_score,
         document_summary,
         page_summaries,
         source_pdf.name,
