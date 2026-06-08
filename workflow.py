@@ -5,8 +5,6 @@ from gemini_region_analyzer import analyze_region
 from document_summary import generate_document_summary
 
 import os
-from difflib import SequenceMatcher
-
 def run_comparison():
 
     results = []
@@ -162,28 +160,20 @@ def run_comparison():
                       target_crop
                         )
 
-                        similarity = SequenceMatcher(
-                            None,
-                            source_crop_text,
-                            target_crop_text
-                        ).ratio()
-                        
-                        combined_text = (
-                            source_crop_text.strip()
-                            + target_crop_text.strip()
+                        source_len = len(
+                        source_crop_text.strip()
+                        )
+
+                        target_len = len(
+                            target_crop_text.strip()
                         )
                         
-                        alpha_chars = sum(
-                            c.isalpha()
-                            for c in combined_text
-                        )
+                        # Large text region
                         
                         if (
-                            alpha_chars > 10
-                            or
-                            len(source_crop_text.strip()) > 30
-                            or
-                            len(target_crop_text.strip()) > 30
+                            source_len > 20
+                            and
+                            target_len > 20
                         ):
                         
                             region_analysis = (
@@ -191,11 +181,27 @@ def run_comparison():
                                 "Description: The detected region "
                                 "contains primarily textual content. "
                                 "The difference appears to be caused "
-                                "by text insertion, text removal, or "
-                                "paragraph reflow rather than an "
-                                "image modification.\n\n"
+                                "by text insertion, removal, or "
+                                "paragraph reflow.\n\n"
                                 "Severity: Medium"
                             )
+                        
+                        # Small text edit
+                        
+                        elif (
+                            source_len > 5
+                            or
+                            target_len > 5
+                        ):
+                        
+                            region_analysis = (
+                                "Type: Text Change\n\n"
+                                "Description: A textual modification "
+                                "was detected in this region.\n\n"
+                                "Severity: Low"
+                            )
+                        
+                        # Real visual comparison
                         
                         else:
                         
