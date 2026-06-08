@@ -60,13 +60,17 @@ A bird photograph was replaced
 by a workflow/process diagram.
 
 Observable Effect:
-IMPORTANT
 
-Do not infer purpose.
-Do not infer intent.
-Do not infer business meaning.
-Do not infer document objectives.
+*IMPORTANT*
+Do not infer:
+- purpose
+- intent
+- meaning
+- business impact
+- user impact
+- informational significance
 
+Only describe visible differences.
 Describe only observable differences.
 
 Output Format:
