@@ -5,6 +5,7 @@ from gemini_region_analyzer import analyze_region
 from document_summary import generate_document_summary
 
 import os
+from PIL import Image
 def run_comparison():
 
     results = []
@@ -161,16 +162,34 @@ def run_comparison():
                         )
 
                         source_len = len(
-                        source_crop_text.strip()
+                            source_crop_text.strip()
                         )
-
+                        
                         target_len = len(
                             target_crop_text.strip()
                         )
                         
-                        # Large text region
+                        crop_width, crop_height = Image.open(
+                            source_crop
+                        ).size
                         
-                        if (
+                        crop_area = (
+                            crop_width
+                            * crop_height
+                        )
+                        
+                        # Large region (likely image/diagram)
+                        
+                        if crop_area > 150000:
+                        
+                            region_analysis = analyze_region(
+                                source_crop,
+                                target_crop
+                            )
+                        
+                        # Large text block
+                        
+                        elif (
                             source_len > 20
                             and
                             target_len > 20
