@@ -5,7 +5,7 @@ from gemini_region_analyzer import analyze_region
 from document_summary import generate_document_summary
 
 import os
-
+from difflib import SequenceMatcher
 
 def run_comparison():
 
@@ -155,33 +155,41 @@ def run_comparison():
                     try:
 
                         source_crop_text = extract_page_text(
-                            source_crop
-                        )
+                        source_crop
+)
 
                         target_crop_text = extract_page_text(
-                            target_crop
+                      target_crop
                         )
 
-                        # Detect text-only changes
+                        similarity = SequenceMatcher(
+                            None,
+                            source_crop_text,
+                            target_crop_text
+                        ).ratio()
+                        
                         if (
                             len(source_crop_text.strip()) > 30
                             and
                             len(target_crop_text.strip()) > 30
+                            and
+                            similarity > 0.40
                         ):
-
+                        
                             region_analysis = (
                                 "Type: Layout Reflow / Text Change\n\n"
                                 "Description: The detected region "
-                                "contains primarily text content. "
+                                "contains primarily textual content. "
                                 "The difference appears to be caused "
-                                "by text insertion, text removal, or "
+                                "by text insertion, deletion, or "
                                 "paragraph reflow rather than an "
-                                "image modification.\n\n"
+                                "image replacement.\n\n"
+                                f"OCR Similarity: {similarity:.2f}\n\n"
                                 "Severity: Medium"
                             )
-
+                        
                         else:
-
+                        
                             region_analysis = analyze_region(
                                 source_crop,
                                 target_crop
