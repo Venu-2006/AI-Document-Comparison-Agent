@@ -122,88 +122,90 @@ def run_comparison():
                 )
             )
 
-# ==========================
-# Visual Region Analysis
-# ==========================
+            # ==========================
+            # Visual Region Analysis
+            # ==========================
 
-region_summary = ""
+            region_summary = ""
 
-region_count = page_region_counts.get(
-    page_no,
-    0
-)
-
-for region in range(
-    1,
-    region_count + 1
-):
-
-    source_crop = (
-        f"screenshots/page_{page_no}_change_{region}_source.png"
-    )
-
-    target_crop = (
-        f"screenshots/page_{page_no}_change_{region}_target.png"
-    )
-
-    if (
-        os.path.exists(source_crop)
-        and
-        os.path.exists(target_crop)
-    ):
-
-        try:
-
-            source_crop_text = extract_page_text(
-                source_crop
+            region_count = page_region_counts.get(
+                page_no,
+                0
             )
 
-            target_crop_text = extract_page_text(
-                target_crop
-            )
-
-            # Detect text-only changes
-            if (
-                len(source_crop_text.strip()) > 30
-                and
-                len(target_crop_text.strip()) > 30
+            for region in range(
+                1,
+                region_count + 1
             ):
 
-                region_analysis = (
-                    "Type: Layout Reflow / Text Change\n\n"
-                    "Description: The detected region "
-                    "contains primarily text content. "
-                    "The difference appears to be caused "
-                    "by text insertion, text removal, or "
-                    "paragraph reflow rather than an "
-                    "image modification.\n\n"
-                    "Severity: Medium"
+                source_crop = (
+                    f"screenshots/page_{page_no}_change_{region}_source.png"
                 )
 
-            else:
-
-                region_analysis = analyze_region(
-                    source_crop,
-                    target_crop
+                target_crop = (
+                    f"screenshots/page_{page_no}_change_{region}_target.png"
                 )
 
-            region_summary += (
-                f"\n\nVisual Change {region}\n"
-                f"{region_analysis}"
-            )
+                if (
+                    os.path.exists(source_crop)
+                    and
+                    os.path.exists(target_crop)
+                ):
 
-        except Exception as e:
+                    try:
 
-            region_summary += (
-                f"\n\nVisual Change {region}\n"
-                f"Gemini Region Error: {str(e)}"
-            )
+                        source_crop_text = extract_page_text(
+                            source_crop
+                        )
+
+                        target_crop_text = extract_page_text(
+                            target_crop
+                        )
+
+                        # Detect text-only changes
+                        if (
+                            len(source_crop_text.strip()) > 30
+                            and
+                            len(target_crop_text.strip()) > 30
+                        ):
+
+                            region_analysis = (
+                                "Type: Layout Reflow / Text Change\n\n"
+                                "Description: The detected region "
+                                "contains primarily text content. "
+                                "The difference appears to be caused "
+                                "by text insertion, text removal, or "
+                                "paragraph reflow rather than an "
+                                "image modification.\n\n"
+                                "Severity: Medium"
+                            )
+
+                        else:
+
+                            region_analysis = analyze_region(
+                                source_crop,
+                                target_crop
+                            )
+
+                        region_summary += (
+                            f"\n\nVisual Change {region}\n"
+                            f"{region_analysis}"
+                        )
+
+                    except Exception as e:
+
+                        region_summary += (
+                            f"\n\nVisual Change {region}\n"
+                            f"Gemini Region Error: {str(e)}"
+                        )
+
             full_summary = (
                 summary
                 + "\n\n"
                 + region_summary
             )
 
+            
             page_summaries[
                 page_no
             ] = full_summary
