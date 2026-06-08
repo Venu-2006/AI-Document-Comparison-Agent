@@ -54,6 +54,10 @@ def _build_line_diff_notes(
             target_lines
         )
     )
+    removed_words, added_words = detect_word_changes(
+    source_text,
+    target_text
+)
 
     removed = []
     added = []
@@ -122,7 +126,33 @@ def _build_line_diff_notes(
         )
 
     return "\n\n".join(parts)
+def detect_word_changes(
+    source_text,
+    target_text
+):
 
+    source_words = source_text.split()
+    target_words = target_text.split()
+
+    diff = list(
+        difflib.ndiff(
+            source_words,
+            target_words
+        )
+    )
+
+    removed = []
+    added = []
+
+    for item in diff:
+
+        if item.startswith("- "):
+            removed.append(item[2:])
+
+        elif item.startswith("+ "):
+            added.append(item[2:])
+
+    return removed[:20], added[:20]
 def generate_page_summary(
     page_number: int,
     source_image_path: str,
@@ -229,6 +259,13 @@ OCR TARGET TEXT:
 OCR LINE DIFF NOTES:
 {diff_notes}
 
+WORD LEVEL CHANGES:
+
+Removed Words:
+{removed_words}
+
+Added Words:
+{added_words}
 Return this format exactly:
 
 Page {page_number} Summary
