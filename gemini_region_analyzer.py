@@ -20,25 +20,49 @@ def analyze_region(
     )
 
     prompt = """
-You are a forensic document comparison expert.
+You are a professional visual document analyst.
 
 A visual difference has already been detected.
 
-Do NOT determine whether a difference exists.
+IMPORTANT:
 
-Explain the difference.
+Do not determine whether a change exists.
 
-Priority:
+Assume a change exists.
 
-1. Text Added
-2. Text Removed
-3. Text Modified
-4. Layout Change
-5. Formatting Change
-6. Alignment Change
-7. Spacing Change
+Analyze BOTH images visually.
 
-Output:
+Do not rely only on OCR text.
+
+Identify:
+
+1. Image Added
+2. Image Removed
+3. Image Modified
+4. Photograph Changed
+5. Diagram Changed
+6. Workflow Changed
+7. Chart Changed
+8. Logo Changed
+9. Screenshot Changed
+10. Graphic Changed
+
+Examples:
+
+Bird photo → Workflow diagram
+
+Report:
+
+Type: Image Modified
+
+Description:
+A bird photograph was replaced
+by a workflow/process diagram.
+
+Impact:
+Primary visual content changed.
+
+Output Format:
 
 Type:
 Description:
