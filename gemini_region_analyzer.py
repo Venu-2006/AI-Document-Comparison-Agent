@@ -59,8 +59,15 @@ Description:
 A bird photograph was replaced
 by a workflow/process diagram.
 
-Impact:
-Primary visual content changed.
+Observable Effect:
+IMPORTANT
+
+Do not infer purpose.
+Do not infer intent.
+Do not infer business meaning.
+Do not infer document objectives.
+
+Describe only observable differences.
 
 Output Format:
 
