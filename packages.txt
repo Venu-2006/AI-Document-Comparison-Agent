@@ -1,2 +1,6 @@
 poppler-utils
+<<<<<<< HEAD
 tesseract-ocr
+=======
+tesseract-ocr
+>>>>>>> 0cf31b7579be874f07f00bb01aaa3d02a8c5765c
