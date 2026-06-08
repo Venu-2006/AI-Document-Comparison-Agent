@@ -158,34 +158,7 @@ if compare:
     excel_v2_file = generate_excel_report_v2(
         page_summaries
     )
-    st.subheader("📊 Change Categories")
-
-    col1, col2, col3, col4 = st.columns(4)
     
-    with col1:
-        st.metric(
-            "📝 Text",
-            change_stats["text"]
-        )
-    
-    with col2:
-        st.metric(
-            "🖼️ Visual",
-            change_stats["visual"]
-        )
-    
-    with col3:
-        st.metric(
-            "📐 Layout",
-            change_stats["layout"]
-        )
-    
-    with col4:
-        st.metric(
-            "🎨 Formatting",
-            change_stats["formatting"]
-        )
-
     st.subheader("📥 Reports")
 
     c1, c2, c3 = st.columns(3)
