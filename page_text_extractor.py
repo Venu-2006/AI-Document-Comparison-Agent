@@ -1,11 +1,16 @@
 import re
 import cv2
+
+
+
+
+import os
 import pytesseract
 
-
-
-pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
-
+if os.name == "nt":
+    pytesseract.pytesseract.tesseract_cmd = (
+        r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+    )
 
 def extract_page_text(image_path: str) -> str:
     img = cv2.imread(image_path)
