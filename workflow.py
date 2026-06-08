@@ -1,7 +1,7 @@
 from compare_engine import *
 from page_text_extractor import extract_page_text
 from page_summary import generate_page_summary
-
+from gemini_region_analyzer import analyze_region
 import os
 from document_summary import (
     generate_document_summary
@@ -63,11 +63,58 @@ def run_comparison():
                 target_text=target_text,
                 visual_region_count=page_region_counts.get(page_no, 0)
             )
+            region_summary = ""
+
+region_count = page_region_counts.get(
+    page_no,
+    0
+)
+
+for region in range(1, region_count + 1):
+
+    source_crop = (
+        f"screenshots/page_{page_no}_change_{region}_source.png"
+    )
+
+    target_crop = (
+        f"screenshots/page_{page_no}_change_{region}_target.png"
+    )
+
+    if (
+        os.path.exists(source_crop)
+        and
+        os.path.exists(target_crop)
+    ):
+
+        try:
+
+            region_analysis = analyze_region(
+                source_crop,
+                target_crop
+            )
+
+            region_summary += (
+                f"\n\nVisual Change {region}\n"
+                f"{region_analysis}"
+            )
+
+        except Exception as e:
+
+            region_summary += (
+                f"\n\nVisual Change {region}\n"
+                f"Gemini Region Error: {str(e)}"
+            )
 
         except Exception as e:
             summary = f"Gemini Error: {str(e)}"
 
-        page_summaries[page_no] = summary
+        full_summary = (
+    summary
+    + "\n\n"
+    + region_summary
+)
+
+page_summaries[page_no] = full_summary
 
         results.append({
 
@@ -75,7 +122,7 @@ def run_comparison():
             "regions": page_region_counts.get(page_no, 0),
             "source": source_marked,
             "target": target_marked,
-            "summary": summary
+            "summary": full_summary
 
         })
 
